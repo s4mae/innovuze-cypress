@@ -17,9 +17,18 @@ describe('Testing Projects Tab from Innovuze Solutions Inc.', () => {
     cy.get('section.projects > div.container-fluid > div.container > div.projects-subtitle > p').contains('A roster of some of our projects with local and global companies and organizations in different industries such as electronics, real estate, F&B, healthcare, and non-profit sector.')
     cy.get('section.projects > div.container-fluid > div:nth-child(3) > div.monitor > div.monitorWrapper').find('img').should('have.attr', 'src').and('include', '.png');
   })
-  it('Verify if Carousel Links are Working', () => {
+  it.only('Verify if Carousel Links are Working', () => {
     // Page should redirect to the right website e.g. https://www.partsim.com/
-    cy.get('section.projects a').contains('Visit').invoke('removeAttr','target').click({force:true})
+    //cy.get('section.projects div.insideMonitorImgOverlay').find('a').invoke('removeAttr', 'target').click({force:true})
+    //cy.url().should('not.include','innovuze')
+    cy.get('section.projects div.insideMonitorImgOverlay a')
+  .trigger('mouseover', { force: true })
+  .should('have.attr', 'href', 'https://www.eeweb.com/')
+  .should('contain.text', 'Visit') // Assuming the button text is 'Visit'
+  .wait(4000)
+  .invoke('removeAttr','target')
+  .click({ force: true });
+  cy.url().should('not.include','innovuze')
   })
 })
 
