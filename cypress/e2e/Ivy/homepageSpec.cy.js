@@ -14,9 +14,9 @@ describe('Dev Innovuze Homepage', () => {
 
     })
     
-    it.only('Verify if homepage contains all elements', () => {
+    it('Verify if homepage contains all elements', () => {
       //navigation
-    cy.get('.navbar-brand img').should('be.visible').and('contain','img').wait(500)
+    cy.get('.navbar-brand img').should('be.visible').wait(500)
     cy.get('.nav-link.home').should('be.visible').wait(500)
     cy.get('.nav-item > a.nav-link:eq(1)').should('be.visible').wait(500)
     cy.get('.nav-item > a.nav-link:eq(2)').should('be.visible').wait(500)
