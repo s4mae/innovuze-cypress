@@ -1,3 +1,6 @@
+import POM from '../pages/WebActions';
+
+
 describe('Testing Innovuze Solutions Inc.', () => {
   beforeEach(() => {
     // visit the dev stage of innovuze website and click careers tab before each test
@@ -12,22 +15,12 @@ describe('Testing Innovuze Solutions Inc.', () => {
     })
 
     it('Verify if the Careers Page contains all elements', () => {
-      // The Following Elements Should be Visible: "Careers" Tex • Four Job Positions
-      cy.get('section.careers h2').contains('Careers')
+      // The Following Elements Should be Visible: "Careers" Text • Four Job Positions
+      cy.url().should('include','careers')
+      cy.get('section.careers h2').should('include.text','Careers')
       cy.get('section.careers > div > div.background-green > div.container-fluid > div.row > div:nth-child(2) > div:nth-child(1)').find('a').each(($el, index, $listofElements) => {
-        cy.log($el.text())
-        cy.get('section.careers > div > div.background-green > div.container-fluid > div.row > div:nth-child(2) > div:nth-child(1) > a').eq(index).should('be.visible')
+        cy.get('section.careers > div > div.background-green > div.container-fluid > div.row > div:nth-child(2) > div:nth-child(1) > a').eq(index).should('be.visible').should('not.be.empty')
       })
-    })
-
-    it('Verify if Clicking the First Four Jobs is Working', () => {
-      // The User should be redirected to  https://dev.innovuze.com/careers#<position_chosen_position> and The Job Contents should be visible and as well as the "Apply for This Job" Button
-      cy.get('section.careers > div > div.background-green > div.container-fluid > div.row > div:nth-child(2) > div:nth-child(1)').find('a').each(($el, index, $listofElements) => {
-      cy.get('section.careers > div > div.background-green > div.container-fluid > div.row > div:nth-child(2) > div:nth-child(1) > a').eq(index).invoke('removeAttr','target').click()
-      cy.get('section.careers-page div.accordion-body').eq(index).should('be.visible').should('not.be.empty')
-      cy.get('section.careers-page div.accordion-body div a').eq(index).should('be.visible')
-      cy.go('back')
-    })
     })
 
     it('Verify if "View Open Roles Here" Button is Working', () => {
@@ -52,7 +45,22 @@ describe('Testing Innovuze Solutions Inc.', () => {
       cy.get('section.careers-page a.job-posting-text').invoke('removeAttr','target').click()
       cy.url().should('not.include', 'innovuze')
     })
-    
+
+    it.only('Verify if Clicking the First Four Jobs is Working', () => {
+      // Iterate over each element matching the selector
+      cy.get('section.careers > div > div.background-green > div.container-fluid > div.row > div:nth-child(2) > div:nth-child(1)').find('a').each(($el, index, $listOfElements) => {
+        POM.getCareerCombinedWords(index).then((firstCombinedText) => {
+          cy.get('section.careers > div > div.background-green > div.container-fluid > div.row > div:nth-child(2) > div:nth-child(1) > a').eq(index).invoke('removeAttr', 'target').click();
+          POM.getCareerSecondCombinedWords(index).then((secondCombinedText) => {
+            cy.wrap(secondCombinedText).should('eq', firstCombinedText);
+            cy.get('.accordion-body').eq(index).should('be.visible').should('not.be.empty');
+            cy.get('section.careers-page div.accordion-body div a').eq(index).should('be.visible');
+            cy.go('back');
+          });
+        });
+      });
+    });
+
   })
   
   
