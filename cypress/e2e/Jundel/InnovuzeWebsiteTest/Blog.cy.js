@@ -4,91 +4,103 @@ describe('Check the Blog', () => {
     })
 
     it('Verify if the About Page contains all elements', () => {
+        cy.get('.button-holder a').click(); //accept cookies
         cy.url().should("contain", "dev.innovuze.com")
         cy.get('#navbarTogglerDemo01 > ul > li:nth-child(6) > a').click({ force: true });
         cy.get('#blog > div > h2').should('contain', 'Blog');
-        cy.get('#blog > div > div > div.col-sm-12.col-md-6.order-first.order-sm-first.order-md-last.latestBlog').scrollIntoView().should('be.visible');
+        cy.get('.blogLatest-holder').scrollIntoView().should('be.visible');
 
     })
 
-    it('Verify If Clicking the Shown Blogs is Working', () => {
+    // it('Verify If Clicking the Shown Blogs is Working', () => {
+    //     cy.visit('https://dev.innovuze.com/#blog');
+    //     cy.url().should("contain", "dev.innovuze.com/#blog");
+
+    //     const selectImg = 4;
+
+    //     for (let i = 0; i < selectImg; i++) { //remove the .wait
+    //         cy.get(`#blog .blog-item img:eq(${i})`).click({ force: true }).should('be.visible').go(-1);
+    //         cy.get(`#blog .blog-title a:eq(${i})`).click({ force: true }).should('be.visible').go(-1);
+    //     }
+    // })
+
+    it('Verify If Clicking the Shown Blogs is Working', () => { //updated looping using each
+        cy.get('.button-holder a').click(); //accept cookies
         cy.visit('https://dev.innovuze.com/#blog');
         cy.url().should("contain", "dev.innovuze.com/#blog");
 
-        const selectImg = 4;
-
-        for (let i = 0; i < selectImg; i++) {
-            cy.get(`#blog .row  > div > .blog-list > div > .row img:eq(${i})`).click({ force: true }).should('be.visible').wait(700).go(-1);
-            cy.get(`#blog .row > div > .blog-list > div > .row > div > h2 a:eq(${i})`).click({ force: true }).should('be.visible').wait(700).go(-1);
-        }
-    })
+        cy.get('#blog .blog-item img, #blog .blog-title a')
+            .each(($element, index) => {
+                cy.wrap($element).click({ force: true }).should('be.visible').go(-1);
+            });
+    });
 
     it('Verify "More Blogs Here" button is working', () => {
+        cy.get('.button-holder a').click(); //accept cookies
         cy.url().should("contain", "dev.innovuze.com")
-        cy.get('#blog .row > div > .text-center a').click();
+        cy.get('#blog .text-center a').click();
         cy.contains("h1", "Blog").should('be.visible');
         cy.url().should("contain", "https://dev.innovuze.com/blog/");
 
     })
+
     it('Verify Pagination is Working', () => {
-        cy.get('#blog .row > div > .text-center a').click();
+        cy.get('.button-holder a').click(); // accept cookies
+        cy.get('#blog .text-center a').click();
         cy.contains("h1", "Blog").should('be.visible');
-        cy.url().should("contain", "https://dev.innovuze.com/blog/");
+        cy.url().should("contain", "https://dev.innovuze.com/blog");
 
-        cy.get('#blog-page > div > div > div > div.blog-pagination > nav > ul > li:nth-child(2) > a').click();
-        cy.get('#blog-page > div > div > div.col-12.col-sm-12.col-md-9.col-lg-9 > div.blog-page-list').should('be.visible');
-        cy.get('#blog-page > div > div > div > div.blog-pagination > nav > ul > li:nth-child(3) > a').click();
-        cy.get('#blog-page > div > div > div.col-12.col-sm-12.col-md-9.col-lg-9 > div.blog-page-list').should('be.visible');
-        cy.get('#blog-page > div > div > div > div.blog-pagination > nav > ul > li:nth-child(4) > a').click();
-        cy.get('#blog-page > div > div > div.col-12.col-sm-12.col-md-9.col-lg-9 > div.blog-page-list').should('be.visible');
-        cy.get('#blog-page > div > div > div > div.blog-pagination > nav > ul > li:nth-child(5) > a').click();
-        cy.get('#blog-page > div > div > div.col-12.col-sm-12.col-md-9.col-lg-9 > div.blog-page-list').should('be.visible');
-    })
+        cy.get('#blog-page .blog-pagination li').each(($paginationLink, index) => {
+            cy.wrap($paginationLink).click({ force: true });
+
+            cy.get('#blog-page div.blog-page-list > div').should('be.visible');
+        });
+    });
 
     it('Verify If First 10 Blogs Links are Working', () => {
-        cy.url().should("contain", "dev.innovuze.com")
-        cy.get('#blog .row > div > .text-center a').click();
+        cy.get('.button-holder a').click(); //accept cookies
+        cy.url().should("contain", "dev.innovuze.com");
+        cy.get('#blog .text-center a').click();
         cy.url().should("contain", "https://dev.innovuze.com/blog/");
 
-        cy.get('#blog-page > div h2 a').eq(0).click({ force: true });
-        cy.url().should("contain", "https://dev.innovuze.com/blog/post/2023/11/riding-the-tech-rapids-a-recap-of-devfest-cagayan-de-oro-2023/").go('back');
-        cy.get('#blog-page > div h2 a').eq(1).click({ force: true });
-        cy.url().should("contain", "https://dev.innovuze.com/blog/post/2023/6/innovuze-partners-with-buda-community-health-care-center/").go('back');
-        cy.get('#blog-page > div h2 a').eq(2).click({ force: true });
-        cy.url().should("contain", "https://dev.innovuze.com/blog/post/2023/6/celebrating-10-years-of-innovation-innovuze-solutions-inc-s-unforgettable-team-building-event/").go('back');
-        cy.get('#blog-page > div h2 a').eq(3).click({ force: true });
-        cy.url().should("contain", "https://dev.innovuze.com/blog/post/2022/5/admin-dits-mini-team-building/").go('back');
-        cy.get('#blog-page > div h2 a').eq(4).click({ force: true });
-        cy.url().should("contain", "https://dev.innovuze.com/blog/post/2022/5/advance-excel-google-sheets-training/").go('back');
-        cy.get('#blog-page > div h2 a').eq(5).click({ force: true });
-        cy.url().should("contain", "https://dev.innovuze.com/blog/post/2022/4/pm-and-digital-marketing-micro-team-building-2022/").go('back');
-        cy.get('#blog-page > div h2 a').eq(6).click({ force: true });
-        cy.url().should("contain", "https://dev.innovuze.com/blog/post/2022/4/get-creative-with-canva/").go('back');
-        cy.get('#blog-page > div h2 a').eq(7).click({ force: true });
-        cy.url().should("contain", "https://dev.innovuze.com/blog/post/2022/4/agile-methodology-virtual-seminar/").go('back');
-        cy.get('#blog-page > div h2 a').eq(8).click({ force: true });
-        cy.url().should("contain", "https://dev.innovuze.com/blog/post/2022/4/email-etiquette-virtual-seminar/").go('back');
-        cy.get('#blog-page > div h2 a').eq(9).click({ force: true });
-        cy.url().should("contain", "https://dev.innovuze.com/blog/post/2022/3/uiux-virtual-seminar/").go('back');
+        const blogLinks = [
+            "https://dev.innovuze.com/blog/post/2023/11/riding-the-tech-rapids-a-recap-of-devfest-cagayan-de-oro-2023/",
+            "https://dev.innovuze.com/blog/post/2023/6/innovuze-partners-with-buda-community-health-care-center/",
+            "https://dev.innovuze.com/blog/post/2023/6/celebrating-10-years-of-innovation-innovuze-solutions-inc-s-unforgettable-team-building-event/",
+            "https://dev.innovuze.com/blog/post/2022/5/admin-dits-mini-team-building/",
+            "https://dev.innovuze.com/blog/post/2022/5/advance-excel-google-sheets-training/",
+            "https://dev.innovuze.com/blog/post/2022/4/pm-and-digital-marketing-micro-team-building-2022/",
+            "https://dev.innovuze.com/blog/post/2022/4/get-creative-with-canva/",
+            "https://dev.innovuze.com/blog/post/2022/4/agile-methodology-virtual-seminar/",
+            "https://dev.innovuze.com/blog/post/2022/4/email-etiquette-virtual-seminar/",
+            "https://dev.innovuze.com/blog/post/2022/3/uiux-virtual-seminar/"
+        ];
 
-    })
+        for (let i = 0; i < blogLinks.length; i++) {
+            cy.get(`#blog-page > div h2 a`).eq(i).click({ force: true });
+            cy.url().should("contain", blogLinks[i]).go('back');
+        }
+    });
 
-    it.only('Verify if Archive Selection is working', () => {
-        cy.get('div#navbarTogglerDemo01 >ul  li:nth-child(6)').click();
-        cy.get('#blog > div > div > div > div.text-center > a').click();
+
+    it('Verify if Archive Selection is working', () => {
+        cy.get('.button-holder a').click(); //accept cookies
+        cy.get('#navbarTogglerDemo01 >ul  li:nth-child(6)').click();
+        cy.get('#blog .text-center a').click();
 
         const archive = 24;
 
         for (let i = 0; i < archive; i++) {
-            cy.get(`#blog-page > div > div > div.col-12.col-sm-12.col-md-3.col-lg-3.archive-wrapper a:eq(${i})`).should('be.visible').click({ force: true }).wait(700);
+            cy.get(`.archive a:eq(${i})`).should('be.visible').click({ force: true }).wait(700); //improve the selector
         }
     })
-    it('Verify if Read More Button is Working', () => {
+    it.only('Verify if Read More Button is Working', () => {
+        cy.get('.button-holder a').click(); //accept cookies
         cy.url().should("contain", "dev.innovuze.com")
-        cy.get('div#navbarTogglerDemo01 >ul  li:nth-child(6)').click();
+        cy.get('#navbarTogglerDemo01 >ul  li:nth-child(6)').click();
         cy.url().should("contain", "dev.innovuze.com/#blog");
 
-        cy.get('section#blog > div .blogLatest-holder a').eq(2).click();
+        cy.get('#blog .latestBlog-title a').click();
         cy.url().should("contain", "dev.innovuze.com/blog/");
         cy.contains("h1", "Blog").should('be.visible');
     })

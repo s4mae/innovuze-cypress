@@ -3,6 +3,7 @@
 describe('Check the Contact Us', () => {
     beforeEach(() => {
         cy.visit('https://dev.innovuze.com')
+        cy.get('.button-holder a').click(); //accept cookies
     })
 
     it('Verify Contact Us Modal Contains All ELements', () => {
