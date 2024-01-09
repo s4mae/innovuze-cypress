@@ -11,7 +11,8 @@ describe('Testing Innovuze Solutions Inc.', () => {
     // Testing Careers Tab
     it('Verifying Careers Tab Works on Click', () => {
       // page should be redirected to https://dev.innovuze.com/#careers
-      cy.url().should('include', '#careers')
+    cy.url().should('include', '#careers')
+    cy.get('section.careers').should('be.visible').should('not.be.empty')
     })
 
     it('Verify if the Careers Page contains all elements', () => {
@@ -19,7 +20,7 @@ describe('Testing Innovuze Solutions Inc.', () => {
       cy.url().should('include','careers')
       cy.get('section.careers h2').should('include.text','Careers')
       cy.get('section.careers > div > div.background-green > div.container-fluid > div.row > div:nth-child(2) > div:nth-child(1)').find('a').each(($el, index, $listofElements) => {
-        cy.get('section.careers > div > div.background-green > div.container-fluid > div.row > div:nth-child(2) > div:nth-child(1) > a').eq(index).should('be.visible').should('not.be.empty')
+      cy.get('section.careers > div > div.background-green > div.container-fluid > div.row > div:nth-child(2) > div:nth-child(1) > a').eq(index).should('be.visible').should('not.be.empty')
       })
     })
 
@@ -49,12 +50,12 @@ describe('Testing Innovuze Solutions Inc.', () => {
     it.only('Verify if Clicking the First Four Jobs is Working', () => {
       // Iterate over each element matching the selector
       cy.get('section.careers > div > div.background-green > div.container-fluid > div.row > div:nth-child(2) > div:nth-child(1)').find('a').each(($el, index, $listOfElements) => {
-        POM.getCareerCombinedWords(index).then((firstCombinedText) => {
+        POM.getFirstThreeWords('section.careers > div > div.background-green > div.container-fluid > div.row > div:nth-child(2) > div:nth-child(1) a').then((firstCombinedText) => {
           cy.get('section.careers > div > div.background-green > div.container-fluid > div.row > div:nth-child(2) > div:nth-child(1) > a').eq(index).invoke('removeAttr', 'target').click();
-          POM.getCareerSecondCombinedWords(index).then((secondCombinedText) => {
-            cy.wrap(secondCombinedText).should('eq', firstCombinedText);
+          POM.getFirstThreeWords('.accordion-button').then((secondCombinedText) => {
             cy.get('.accordion-body').eq(index).should('be.visible').should('not.be.empty');
             cy.get('section.careers-page div.accordion-body div a').eq(index).should('be.visible');
+            cy.wrap(secondCombinedText).should('eq', firstCombinedText);
             cy.go('back');
           });
         });
