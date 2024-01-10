@@ -1,4 +1,4 @@
-import ContactUsPage from "../../pages/ContactUs";
+import ContactUsPage from "../../../pages/ContactUs";
 
 describe('Check the Contact Us', () => {
     const contactUsPage = new ContactUsPage();
