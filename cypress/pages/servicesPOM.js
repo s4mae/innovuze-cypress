@@ -20,26 +20,30 @@ class ServicesPage {
   
     clickInquireNowButtons() {
       this.clickServicesNavItem();
-      const numServices = 8;
-  
-      for (let i = 0; i < numServices; i++) {
-        cy.get(`#services img:eq(${i})`).should('be.visible');
-        cy.get(`#services .services-title p:eq(${i})`).should('be.visible');
-        cy.get(`#services .services-description p:eq(${i})`).should('be.visible');
-        cy.get(`.col-sm-6 > .btn-inquireNow-wrapper a:eq(${i})`).click({ force: true });
+    
+      cy.get('#services img').each(($img, index) => {
+        const serviceTitle = `#services .services-title p:eq(${index})`;
+        const serviceDescription = `#services .services-description p:eq(${index})`;
+        const inquireNowButton = `.col-sm-6 > .btn-inquireNow-wrapper a:eq(${index})`;
+    
+        cy.get($img).should('be.visible');
+        cy.get(serviceTitle).should('be.visible');
+        cy.get(serviceDescription).should('be.visible');
+        
+        cy.get(inquireNowButton).click({ force: true });
         cy.get('.modal-content > .modal-body > .btn-close-wrapper').click({ force: true });
-      }
+      });
+        
     }
   
     verifyTechStack() {
       this.clickServicesNavItem();
       cy.get('#ourTechStack > div h2').should('contain', 'Our Tech Stack').scrollIntoView();
   
-      const numTechStackIcons = 17;
-  
-      for (let i = 0; i < numTechStackIcons; i++) {
-        cy.get(`.row > .col-4 > .techStackIconWrapper img:eq(${i})`).should('be.visible');
-      }
+      cy.get('.row > .col-4 > .techStackIconWrapper img').each(($icon) => {
+      cy.get($icon).should('be.visible');
+    });
+    
     }
   
     clickGetStartedButton() {

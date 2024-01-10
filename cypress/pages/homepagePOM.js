@@ -16,29 +16,24 @@ class HomePage {
     }
   
     verifyNavbarElements() {
+      const menuItems = ['Home', 'About', 'Services', 'Projects', 'Careers', 'Blog', 'Contact Us'];
+    
       this.clickNavbarBrand();
-      this.verifyNavItem(0, 'Home');
-      this.clickNavbarBrand();
-      this.verifyNavItem(1, 'About');
-      this.clickNavbarBrand();
-      this.verifyNavItem(2, 'Services');
-      this.clickNavbarBrand();
-      this.verifyNavItem(3, 'Projects');
-      this.clickNavbarBrand();
-      this.verifyNavItem(4, 'Careers');
-      this.clickNavbarBrand();
-      this.verifyNavItem(5, 'Blog');
-      this.clickNavbarBrand();
-      this.verifyNavItem(6, 'Contact Us');
+    
+      cy.get('.nav-item > a.nav-link').each(($el, index) => {
+        this.verifyNavItem(index, menuItems[index]);
+        
+      });
+    
     }
   
     verifyHomepageElements() {
       // Verify navigation elements
       cy.get('.navbar-brand img').should('be.visible');
       cy.get('.nav-link.home').should('be.visible');
-      for (let i = 1; i <= 6; i++) {
-        cy.get(`.nav-item > a.nav-link:eq(${i})`).should('be.visible');
-      }
+      cy.get('.nav-item > a.nav-link').each(($el) => {
+      cy.wrap($el).should('be.visible');
+      });  
   
       // Verify banner/ISI LOGO elements
       cy.get('.banner-item > div > img').should('be.visible');

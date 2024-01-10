@@ -25,9 +25,9 @@ class AboutPage {
       cy.get('.abt-us-btn-wrapper > .btn').should('be.visible').click();
       cy.get('.section-title').should('contain', 'Careers');
   
-      for (let i = 0; i < 6; i++) {
-        cy.get('#headingThree > button').eq(i).click();
-      }
+      // for (let i = 0; i < 6; i++) {
+      //   cy.get('#headingThree > button').eq(i).click();
+      // }
   
       cy.get('#headingThree > button').each(($button, index) => {
         cy.wrap($button).click();

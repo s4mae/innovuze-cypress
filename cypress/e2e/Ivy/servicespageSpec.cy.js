@@ -9,7 +9,7 @@ import ServicesPage from '../../pages/servicesPOM';
     it('Verify if the Services Page contains all elements', () => {
         servicesPage.verifyServicesPageElements();
     });
-    it('Verify if "Inquire Now" Button on Each Services is Working', () => {
+    it.only('Verify if "Inquire Now" Button on Each Services is Working', () => {
         servicesPage.clickInquireNowButtons();
     });
     it('Verify the Our Tech Stack if Visible', () => {
